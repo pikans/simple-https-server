@@ -2,7 +2,6 @@ package main
 
 import (
         "context"
-	"crypto/tls"
 	"flag"
 	"log"
 	"net/http"
@@ -21,7 +20,7 @@ func run(register, listenhttp, listenhttps, state, serve string) {
 	go func() { log.Fatal(http.ListenAndServe(listenhttp, letsEncryptManager.HTTPHandler(nil))) }()
 	srv := &http.Server{
 		Addr:      listenhttps,
-		TLSConfig: &tls.Config{GetCertificate: letsEncryptManager.GetCertificate},
+		TLSConfig: letsEncryptManager.TLSConfig(),
 		Handler:   http.FileServer(http.Dir(serve)),
 	}
 
